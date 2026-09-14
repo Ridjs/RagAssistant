@@ -1,3 +1,4 @@
+import re
 from pypdf import PdfReader
 
 class DocumentParser:
@@ -8,7 +9,8 @@ class DocumentParser:
         for page_num, page in enumerate(read.pages):
             page_text = page.extract_text()
             if page_text:
-                text += f"\n--- Page {page_num + 1} ---\n" + page_text
+                cleaned_text = re.sub(r'\s+',' ', page_text).strip()
+                text += f"\n--- Page {page_num + 1} ---\n" + cleaned_text
         return text
 
     @staticmethod
@@ -22,10 +24,10 @@ class DocumentParser:
         step = chunk_size - chunk_overlap
 
         while start < len(text):
-            end = start + chunk_overlap
+            end = start + chunk_size
             chunk = text[start:end]
             cleaned_chunk = chunk.strip();
-            if cleaned_chunk:
+            if len(cleaned_chunk) > 10:
                 chunks.append(cleaned_chunk)
             start+=step
 
