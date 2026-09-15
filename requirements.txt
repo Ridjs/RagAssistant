@@ -1,5 +1,5 @@
-streamlit==1.32.0
-sentence-transformers==2.5.1
+streamlit
+sentence-transformers
 pymupdf
-numpy==1.26.4
-huggingface_hub==0.21.4
+groq
+numpy
