@@ -1,16 +1,18 @@
 import re
-from pypdf import PdfReader
+import pymupdf
 
 class DocumentParser:
     @staticmethod
     def extract_text(file) -> str:
-        read = PdfReader(file)
+        read = pymupdf.open(stream=file,filetype="pdf")
         text = ""
-        for page_num, page in enumerate(read.pages):
-            page_text = page.extract_text()
+        for page_num, page in enumerate(read):
+            page_text = page.get_text("text",sort=True)
             if page_text:
                 cleaned_text = re.sub(r'\s+',' ', page_text).strip()
-                text += f"\n--- Page {page_num + 1} ---\n" + cleaned_text
+                if cleaned_text:
+                    text += f"\n--- Page {page_num + 1} ---\n" + cleaned_text            
+        read.close()
         return text
 
     @staticmethod
